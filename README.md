@@ -24,7 +24,7 @@ export const config = {
 
 #### POST `/api/updates`
 
-> 🔑 Authenticated
+> **🔑 Authenticated**
 >
 > Sets the current version and changelog. If everything went well, returns 204. Pass the update data object as body.
 >
