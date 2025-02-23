@@ -1,0 +1,14 @@
+## Make a draft
+```
+!draft (--update)
+<min version>
+<max version>
+<title>
+<text>
+```
+## View announcements
+`!ls` `!drafts` `!published`
+## Manage announcements
+`!rm <id>` `!publish <id>` `!unpublish <id>`
+## Other
+`!ping` `!build`
