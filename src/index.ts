@@ -22,7 +22,7 @@ app.get("/api/updates", async (req: Request, res: Response) => {
         return res.send({
             version: 900,
             changelog:
-                "Major rework of the update system, settings, and notable fixes. Update to avoid things breaking."
+                "⚠️ Major rework of the update system, settings, and notable fixes. Update to avoid things breaking."
         });
     }
     const dbUpdate = await db.all(
