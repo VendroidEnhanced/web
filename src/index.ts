@@ -71,9 +71,8 @@ app.get("/api/updates", async (req: Request, res: Response) => {
 });
 
 app.get("/api/contributors", async (req: Request, res: Response) => {
-    res.json({
-        contributors: ["886685857560539176"]
-    });
+    const contributors = await db.all("SELECT * FROM contributors");
+    res.json(contributors);
 });
 
 app.listen(port, () => {

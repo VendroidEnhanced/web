@@ -20,4 +20,10 @@ export async function init() {
             published BOOLEAN NOT NULL
         )
     `);
+    await db.exec(`
+        CREATE TABLE IF NOT EXISTS contributors (
+            id TEXT NOT NULL,
+            description TEXT NOT NULL
+        )
+    `);
 }

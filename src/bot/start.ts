@@ -234,6 +234,31 @@ Max version: ${maxVer}`
                 msg.channel?.createMessage({
                     content: "Building Vencord :rocket:"
                 });
+                break;
+            }
+            case "addcontrib": {
+                const args = msg.content.split(" ");
+                const id = args[1];
+                const description = args.slice(2).join(" ");
+                if (!id || !description) return;
+
+                await db.run("INSERT INTO contributors (id, description) VALUES (?, ?)", id, description);
+
+                await msg.channel?.createMessage({
+                    content: "Done!"
+                });
+                break;
+            }
+            case "rmcontrib": {
+                const id = msg.content.split(" ")[1];
+                if (!id) return;
+
+                await db.run("DELETE FROM contributors WHERE id = ?", id);
+
+                await msg.channel?.createMessage({
+                    content: "Done!"
+                });
+                break;
             }
         }
     }

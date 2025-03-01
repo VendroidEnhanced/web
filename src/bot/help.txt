@@ -11,4 +11,4 @@
 ## Manage announcements
 `!rm <id>` `!publish <id>` `!unpublish <id>`
 ## Other
-`!ping` `!build`
+`!ping` `!build` `!addcontrib` !rmcontrib`
