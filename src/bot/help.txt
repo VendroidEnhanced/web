@@ -11,7 +11,7 @@
 ## Manage announcements
 `!rm <id>` `!publish <id>` `!unpublish <id>`
 ## Manage contributors
-`!addcontrib` !rmcontrib` `!lscontrib`
+`!addcontrib` `!rmcontrib` `!lscontrib`
 
 ## Other
 `!ping` `!build`
