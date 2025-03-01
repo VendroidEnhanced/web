@@ -67,10 +67,10 @@ app.get("/api/updates", async (req: Request, res: Response) => {
     });
 });
 
-app.get("/api/contributors", async (req: Request, res: Response) {
+app.get("/api/contributors", async (req: Request, res: Response) => {
     res.json({
         contributors: ["886685857560539176"]
-    })
+    });
 });
 
 app.listen(port, () => {
