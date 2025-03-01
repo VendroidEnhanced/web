@@ -10,5 +10,7 @@
 `!ls` `!drafts` `!published`
 ## Manage announcements
 `!rm <id>` `!publish <id>` `!unpublish <id>`
+## Manage contributors
+`!addcontrib` !rmcontrib` `!lscontrib`
 ## Other
-`!ping` `!build` `!addcontrib` !rmcontrib`
+`!ping` `!build`
