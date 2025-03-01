@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import { connect } from "./bot/start";
 import { db, init } from "./database";
+import { fuckCors } from "./cors";
 
 const app: Express = express();
 const port = 8637;
@@ -15,6 +16,8 @@ process.on("uncaughtException", err => {
     console.error("Uncaught Exception thrown", err);
     process.exit(1);
 });
+
+app.use(fuckCors);
 
 // @ts-ignore
 app.get("/api/updates", async (req: Request, res: Response) => {
