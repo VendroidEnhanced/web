@@ -72,7 +72,9 @@ app.get("/api/updates", async (req: Request, res: Response) => {
 
 app.get("/api/contributors", async (req: Request, res: Response) => {
     const contributors = await db.all("SELECT * FROM contributors");
-    res.json(contributors);
+    res.json({
+        contributors
+    });
 });
 
 app.listen(port, () => {
