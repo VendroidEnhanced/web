@@ -242,7 +242,11 @@ Max version: ${maxVer}`
                 const description = args.slice(2).join(" ");
                 if (!id || !description) return;
 
-                await db.run("INSERT INTO contributors (id, description) VALUES (?, ?)", id, description);
+                await db.run(
+                    "INSERT INTO contributors (id, description) VALUES (?, ?)",
+                    id,
+                    description
+                );
 
                 await msg.channel?.createMessage({
                     content: "Done!"
@@ -259,6 +263,22 @@ Max version: ${maxVer}`
                     content: "Done!"
                 });
                 break;
+            }
+            case "lscontrib": {
+                const contributors = await db.all("SELECT * FROM contributors");
+                await msg.channel?.createMessage({
+                    embeds: [
+                        {
+                            title: "Contributors",
+                            description: contributors
+                                .map(contrib => {
+                                    return `ID: ${contrib.id}
+                Description: ${contrib.description}`;
+                                })
+                                .join("\n\n")
+                        }
+                    ]
+                });
             }
         }
     }
