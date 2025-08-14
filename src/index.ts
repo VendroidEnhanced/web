@@ -14,7 +14,6 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 process.on("uncaughtException", err => {
     console.error("Uncaught Exception thrown", err);
-    process.exit(1);
 });
 
 app.use(fuckCors);
