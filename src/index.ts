@@ -58,6 +58,7 @@ app.get("/api/updates", async (req: Request, res: Response) => {
             }
         }
     })();
+    if (req.query.forceSend) update = dbUpdate[0];
     let announcements: any[] = [];
     const version = req.query.version;
     announcements = dbAnnouncements
