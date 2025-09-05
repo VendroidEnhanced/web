@@ -20,7 +20,7 @@ app.use(fuckCors);
 
 // @ts-ignore
 app.get("/api/updates", async (req: Request, res: Response) => {
-    if (!req.query.version) {
+    if (!req.query.version && !req.query.forceSend) {
         await fetch(process.env.ANCIENT_WH!, {
             headers: {
                 "Content-Type": "application/json"
