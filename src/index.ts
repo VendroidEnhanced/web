@@ -21,6 +21,15 @@ app.use(fuckCors);
 // @ts-ignore
 app.get("/api/updates", async (req: Request, res: Response) => {
     if (!req.query.version) {
+        await fetch(process.env.ANCIENT_WH!, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({
+                content: "Someone is using a pre-update2 version!"
+            })
+        });
         return res.send({
             version: 900,
             changelog:
