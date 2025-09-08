@@ -17,6 +17,7 @@ process.on("uncaughtException", err => {
 });
 
 app.use(fuckCors);
+app.use(express.static("site/dist"));
 
 // @ts-ignore
 app.get("/api/updates", async (req: Request, res: Response) => {
@@ -47,8 +48,8 @@ app.get("/api/updates", async (req: Request, res: Response) => {
         if (dbUpdate.length > 0) {
             const version = req.query.version;
             if (
-                (dbUpdate[0].minVersion === 0 || dbUpdate[0].minVersion < version) &&
-                (dbUpdate[0].maxVersion === 0 || dbUpdate[0].maxVersion > version)
+                (dbUpdate[0].minVersion === 0 || dbUpdate[0].minVersion < version!) &&
+                (dbUpdate[0].maxVersion === 0 || dbUpdate[0].maxVersion > version!)
             ) {
                 update = {
                     title: dbUpdate[0].title,
@@ -64,8 +65,8 @@ app.get("/api/updates", async (req: Request, res: Response) => {
     announcements = dbAnnouncements
         .filter(announcement => {
             return (
-                (announcement.minVersion === 0 || announcement.minVersion < version) &&
-                (announcement.maxVersion === 0 || announcement.maxVersion > version)
+                (announcement.minVersion === 0 || announcement.minVersion < version!) &&
+                (announcement.maxVersion === 0 || announcement.maxVersion > version!)
             );
         })
         .map(announcement => ({
