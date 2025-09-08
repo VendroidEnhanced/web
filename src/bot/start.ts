@@ -3,6 +3,8 @@ import { AllIntents, Client } from "oceanic.js";
 import { db } from "../database";
 // @ts-ignore
 import help from "./help.txt";
+import { execSync } from "child_process";
+import { rmSync } from "fs";
 
 const bot = new Client({
     auth: `Bot ${process.env.TOKEN}`,
@@ -35,6 +37,37 @@ bot.on("messageCreate", async msg => {
         }
         if (msg.author.id !== "886685857560539176") return;
         switch (command) {
+            case "update": {
+                try {
+                    rmSync("site", {
+                        recursive: true,
+                        force: true
+                    });
+                } catch (e) {}
+                await msg.channel?.createMessage({
+                    content: "Cloning website"
+                });
+                execSync("git clone https://github.com/VendroidEnhanced/site");
+                await msg.channel?.createMessage({
+                    content: "Installing deps"
+                });
+                execSync("cd site && pnpm i --frozen-lockfile");
+                await msg.channel?.createMessage({
+                    content: "Building"
+                });
+                execSync("cd site && pnpm build");
+                execSync("mv site/dist site-dist");
+                try {
+                    rmSync("site", {
+                        recursive: true,
+                        force: true
+                    });
+                } catch (e) {}
+                await msg.channel?.createMessage({
+                    content: `Done! https://vendroid.nin0.dev?${Date.now()}`
+                });
+                break;
+            }
             case "draft": {
                 const rawLines = msg.content.split("\n");
                 if (rawLines.length < 5) return;

@@ -17,7 +17,7 @@ process.on("uncaughtException", err => {
 });
 
 app.use(fuckCors);
-app.use(express.static("site/dist"));
+app.use(express.static("site-dist"));
 
 // @ts-ignore
 app.get("/api/updates", async (req: Request, res: Response) => {

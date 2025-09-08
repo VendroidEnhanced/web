@@ -14,4 +14,4 @@
 `!addcontrib` `!rmcontrib` `!lscontrib`
 
 ## Other
-`!ping` `!build`
+`!ping` `!build` `!update`
