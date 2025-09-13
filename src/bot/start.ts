@@ -62,6 +62,17 @@ bot.on("ready", async () => {
     );
 });
 
+bot.on("messageReactionAdd", async msg => {
+    if (msg.id === "1416491400811511979" && msg.channelID === "1414028198135730206") {
+        await bot.rest.channels.editMessage(
+            "1414028198135730206",
+            "1416491400811511979",
+            await buildAnalyticsMessage("24h")
+        );
+        await bot.rest.channels.deleteReactions("1414028198135730206", "1416491400811511979");
+    }
+});
+
 bot.on("messageCreate", async msg => {
     if (msg.author.id === bot.user.id) return;
     if (!msg.guild) return;
