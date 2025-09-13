@@ -39,7 +39,7 @@ app.get("/api/updates", async (req: Request, res: Response) => {
                 "⚠️ Major rework of the update system, settings, and notable fixes. Update to avoid things breaking."
         });
 
-        await db.exec("INSERT INTO requests VALUES (null, null)");
+        await db.run("INSERT INTO requests VALUES (?, null)", Date.now());
         return;
     }
     const dbUpdate = await db.all(
@@ -85,8 +85,9 @@ app.get("/api/updates", async (req: Request, res: Response) => {
     });
 
     if (!parseInt((version as string) || "")) return;
+    if (parseInt(version as string) < 11) return;
 
-    await db.run("INSERT INTO requests VALUES (?, ?)", parseInt(version as string), null);
+    await db.run("INSERT INTO requests VALUES (?, ?)", Date.now(), parseInt(version as string));
 });
 
 app.get("/api/contributors", async (req: Request, res: Response) => {

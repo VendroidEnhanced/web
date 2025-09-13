@@ -28,8 +28,8 @@ export async function init() {
     `);
     await db.exec(`
         CREATE TABLE IF NOT EXISTS requests (
-            appVer INTEGER,
-            deviceVer INTEGER
+            timestamp INTEGER,
+            appVer INTEGER
         )
     `);
 }
