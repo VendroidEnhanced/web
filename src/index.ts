@@ -1,5 +1,5 @@
 import express, { Express, Request, Response } from "express";
-import { connect } from "./bot/start";
+import { bot, connect } from "./bot/start";
 import { db, init } from "./database";
 import { fuckCors } from "./cors";
 
@@ -23,14 +23,8 @@ app.use(express.static("site-dist"));
 app.get("/api/updates", async (req: Request, res: Response) => {
     if (!req.query.version && !req.query.forceSend) {
         try {
-            await fetch(process.env.ANCIENT_WH!, {
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                method: "POST",
-                body: JSON.stringify({
-                    content: "Someone is using a pre-update2 version!"
-                })
+            await bot.rest.channels.createMessage("1413486812646740050", {
+                content: "Someone is using a pre-update2 version!"
             });
         } catch {}
         res.send({
