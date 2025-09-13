@@ -1,4 +1,3 @@
-import { raw } from "express";
 import {
     AllIntents,
     Client,
@@ -7,11 +6,9 @@ import {
     GuildComponentSelectMenuInteraction,
     GuildModalSubmitInteraction,
     InteractionTypes,
+    MessageFlags,
     MessageReference
 } from "oceanic.js";
-import { db } from "../database";
-import { execSync } from "child_process";
-import { rmSync } from "fs";
 import { Command } from "../types";
 import ping from "./commands/ping";
 import update from "./commands/update";
@@ -19,8 +16,17 @@ import build from "./commands/build";
 import contributors from "./commands/contributors";
 import announcements from "./commands/announcements";
 import help from "./commands/help";
+import analytics, { buildAnalyticsMessage } from "./commands/analytics";
 
-export const commands: Command[] = [help, ping, build, update, contributors, announcements];
+export const commands: Command[] = [
+    analytics,
+    help,
+    ping,
+    build,
+    update,
+    contributors,
+    announcements
+];
 
 export const bot = new Client({
     auth: `Bot ${process.env.TOKEN}`,
@@ -35,8 +41,23 @@ export const bot = new Client({
     }
 });
 
-bot.on("ready", () => {
+bot.on("ready", async () => {
     console.log("Discord connected as", bot.user.tag);
+
+    setInterval(
+        async () =>
+            bot.rest.channels.editMessage(
+                "1414028198135730206",
+                "1416491400811511979",
+                await buildAnalyticsMessage("24h")
+            ),
+        600000
+    );
+    bot.rest.channels.editMessage(
+        "1414028198135730206",
+        "1416491400811511979",
+        await buildAnalyticsMessage("24h")
+    );
 });
 
 bot.on("messageCreate", async msg => {

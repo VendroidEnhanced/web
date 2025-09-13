@@ -32,4 +32,10 @@ export async function init() {
             appVer INTEGER
         )
     `);
+    await db.exec(`
+        CREATE TABLE IF NOT EXISTS versions (
+            id INTEGER NOT NULL,
+            name TEXT NOT NULL
+        )
+    `);
 }
