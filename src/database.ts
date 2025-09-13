@@ -26,4 +26,10 @@ export async function init() {
             description TEXT NOT NULL
         )
     `);
+    await db.exec(`
+        CREATE TABLE IF NOT EXISTS requests (
+            appVer INTEGER,
+            deviceVer INTEGER
+        )
+    `);
 }

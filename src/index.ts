@@ -22,20 +22,25 @@ app.use(express.static("site-dist"));
 // @ts-ignore
 app.get("/api/updates", async (req: Request, res: Response) => {
     if (!req.query.version && !req.query.forceSend) {
-        await fetch(process.env.ANCIENT_WH!, {
-            headers: {
-                "Content-Type": "application/json"
-            },
-            method: "POST",
-            body: JSON.stringify({
-                content: "Someone is using a pre-update2 version!"
-            })
-        });
-        return res.send({
+        try {
+            await fetch(process.env.ANCIENT_WH!, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    content: "Someone is using a pre-update2 version!"
+                })
+            });
+        } catch {}
+        res.send({
             version: 900,
             changelog:
                 "⚠️ Major rework of the update system, settings, and notable fixes. Update to avoid things breaking."
         });
+
+        await db.exec("INSERT INTO requests VALUES (null, null)");
+        return;
     }
     const dbUpdate = await db.all(
         "SELECT * FROM announcements WHERE published=true AND isUpdate=true ORDER BY id DESC LIMIT 1"
@@ -78,6 +83,10 @@ app.get("/api/updates", async (req: Request, res: Response) => {
         update,
         announcements: announcements
     });
+
+    if (!parseInt((version as string) || "")) return;
+
+    await db.run("INSERT INTO requests VALUES (?, ?)", parseInt(version as string), null);
 });
 
 app.get("/api/contributors", async (req: Request, res: Response) => {
