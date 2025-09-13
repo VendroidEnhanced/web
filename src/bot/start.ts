@@ -10,8 +10,6 @@ import {
     MessageReference
 } from "oceanic.js";
 import { db } from "../database";
-// @ts-ignore
-import help from "./help.txt";
 import { execSync } from "child_process";
 import { rmSync } from "fs";
 import { Command } from "../types";
@@ -20,8 +18,9 @@ import update from "./commands/update";
 import build from "./commands/build";
 import contributors from "./commands/contributors";
 import announcements from "./commands/announcements";
+import help from "./commands/help";
 
-const commands: Command[] = [ping, build, update, contributors, announcements];
+export const commands: Command[] = [help, ping, build, update, contributors, announcements];
 
 export const bot = new Client({
     auth: `Bot ${process.env.TOKEN}`,
