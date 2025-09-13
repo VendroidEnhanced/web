@@ -17,6 +17,7 @@ import contributors from "./commands/contributors";
 import announcements from "./commands/announcements";
 import help from "./commands/help";
 import analytics, { buildAnalyticsMessage } from "./commands/analytics";
+import addVer from "./commands/addVer";
 
 export const commands: Command[] = [
     analytics,
@@ -25,7 +26,8 @@ export const commands: Command[] = [
     build,
     update,
     contributors,
-    announcements
+    announcements,
+    addVer
 ];
 
 export const bot = new Client({
