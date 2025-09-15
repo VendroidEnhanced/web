@@ -20,7 +20,7 @@ export default defineCommand({
         await msg.channel?.createMessage({
             content: "Cloning website"
         });
-        execSync("git clone --depth 1 https://github.com/VendroidEnhanced/site");
+        execSync(`git clone --depth 1 ${process.env.SITE_REPO_URL}`);
         await msg.channel?.createMessage({
             content: "Installing deps"
         });
@@ -45,7 +45,7 @@ export default defineCommand({
                     components: [
                         {
                             type: ComponentTypes.BUTTON,
-                            url: `https://vendroid.nin0.dev?${Date.now()}`,
+                            url: `https://${process.env.VENDROID_BASE_URL}?${Date.now()}`,
                             label: "Go to site",
                             style: ButtonStyles.LINK
                         }

@@ -4,7 +4,7 @@ import { db, init } from "./database";
 import { fuckCors } from "./cors";
 
 const app: Express = express();
-const port = 8637;
+const port = process.env.PORT || 8637;
 
 connect();
 init();
@@ -22,11 +22,6 @@ app.use(express.static("site-dist"));
 // @ts-ignore
 app.get("/api/updates", async (req: Request, res: Response) => {
     if (!req.query.version && !req.query.forceSend) {
-        try {
-            await bot.rest.channels.createMessage("1413486812646740050", {
-                content: "Someone is using a pre-update2 version!"
-            });
-        } catch {}
         res.send({
             version: 900,
             changelog:

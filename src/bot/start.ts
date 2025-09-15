@@ -18,6 +18,7 @@ import announcements from "./commands/announcements";
 import help from "./commands/help";
 import analytics, { buildAnalyticsMessage } from "./commands/analytics";
 import addVer from "./commands/addVer";
+import say from "./commands/say";
 
 export const commands: Command[] = [
     analytics,
@@ -27,7 +28,8 @@ export const commands: Command[] = [
     update,
     contributors,
     announcements,
-    addVer
+    addVer,
+    say
 ];
 
 export const bot = new Client({
@@ -43,47 +45,44 @@ export const bot = new Client({
     }
 });
 
+const updatePredefinedAnalyticsMessage = async () =>
+    bot.rest.channels.editMessage(
+        process.env.ANALYTICS_CHANNEL_ID!,
+        process.env.ANALYTICS_MESSAGE_ID!,
+        await buildAnalyticsMessage("24h")
+    );
+
 bot.on("ready", async () => {
     console.log("Discord connected as", bot.user.tag);
 
-    setInterval(
-        async () =>
-            bot.rest.channels.editMessage(
-                "1414028198135730206",
-                "1416491400811511979",
-                await buildAnalyticsMessage("24h")
-            ),
-        600000
-    );
-    bot.rest.channels.editMessage(
-        "1414028198135730206",
-        "1416491400811511979",
-        await buildAnalyticsMessage("24h")
-    );
+    setInterval(updatePredefinedAnalyticsMessage, 600000);
+    updatePredefinedAnalyticsMessage();
 });
 
 bot.on("messageReactionAdd", async msg => {
-    if (msg.id === "1416491400811511979" && msg.channelID === "1414028198135730206") {
-        await bot.rest.channels.editMessage(
-            "1414028198135730206",
-            "1416491400811511979",
-            await buildAnalyticsMessage("24h")
+    if (
+        msg.id === process.env.ANALYTICS_MESSAGE_ID! &&
+        msg.channelID === process.env.ANALYTICS_CHANNEL_ID!
+    ) {
+        await updatePredefinedAnalyticsMessage();
+        await bot.rest.channels.deleteReactions(
+            process.env.ANALYTICS_CHANNEL_ID!,
+            process.env.ANALYTICS_MESSAGE_ID!
         );
-        await bot.rest.channels.deleteReactions("1414028198135730206", "1416491400811511979");
     }
 });
 
 bot.on("messageCreate", async msg => {
     if (msg.author.id === bot.user.id) return;
     if (!msg.guild) return;
-    if (msg.guildID !== "1274790619146879108") return;
+    if (msg.guildID !== process.env.ALLOWED_GUILD) return;
 
-    if (msg.content.startsWith("!")) {
-        const command = msg.content.split(/( |\n)/)[0].replace("!", "");
+    if (msg.content.startsWith(process.env.PREFIX!)) {
+        const command = msg.content.split(/( |\n)/)[0].replace(process.env.PREFIX!, "");
 
         for (const cd of commands) {
             if (cd.name === command) {
-                if (cd.admin && msg.author.id !== "886685857560539176")
+                if (cd.admin && msg.author.id !== process.env.ADMIN_ID)
                     return msg.createReaction("💢");
 
                 const returnValue = await cd.exec(msg);
@@ -93,6 +92,7 @@ bot.on("messageCreate", async msg => {
                     messageID: msg.id
                 };
 
+                if (!returnValue) return;
                 typeof returnValue === "string"
                     ? await msg.channel?.createMessage({
                           content: returnValue,
@@ -129,7 +129,7 @@ bot.on("interactionCreate", async interaction => {
                                 if (interaction.data.componentType === ComponentTypes.BUTTON) {
                                     if (
                                         command.admin &&
-                                        interaction.user.id !== "886685857560539176"
+                                        interaction.user.id !== process.env.ADMIN_ID
                                     )
                                         return;
 
@@ -153,7 +153,7 @@ bot.on("interactionCreate", async interaction => {
                                 ) {
                                     if (
                                         command.admin &&
-                                        interaction.user.id !== "886685857560539176"
+                                        interaction.user.id !== process.env.ADMIN_ID
                                     )
                                         return;
 

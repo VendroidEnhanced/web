@@ -2,18 +2,7 @@ import { ButtonStyles, ComponentTypes, CreateMessageOptions, MessageFlags } from
 import { db } from "../../database";
 import { defineCommand } from "../../types";
 import { Canvas } from "skia-canvas";
-import {
-    ArcElement,
-    CategoryScale,
-    Chart,
-    Legend,
-    LinearScale,
-    LineController,
-    LineElement,
-    PieController,
-    PointElement
-} from "chart.js";
-import { writeFile } from "node:fs/promises";
+import { ArcElement, CategoryScale, Chart, Legend, PieController } from "chart.js";
 
 function getRandomColor(): string {
     return `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(

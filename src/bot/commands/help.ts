@@ -21,7 +21,7 @@ export default defineCommand({
             .map(
                 command =>
                     `**\`${command.name}\`**${
-                        command.admin ? " <:owner:1416361009874075679>" : ""
+                        command.admin ? ` <:owner:${process.env.EMOJI_OWNER}>` : ""
                     } ~ ${command.description}`
             )
             .join("\n");

@@ -38,12 +38,12 @@ async function buildAnnouncementsMessage(): Promise<CreateMessageOptions> {
                                 content: `${
                                     [
                                         [
-                                            "<:update:1416347050076798977>",
-                                            "<:announcement:1416347060512227439>"
+                                            `<:update:${process.env.EMOJI_UPDATE}>`,
+                                            `<:announcement:${process.env.EMOJI_ANNOUNCEMENT}>`
                                         ],
                                         [
-                                            "<:updateLocked:1416348040414888058>",
-                                            "<:announcementLocked:1416348050624086046>"
+                                            `<:updateLocked:${process.env.EMOJI_UPDATE_LOCKED}>`,
+                                            `<:announcementLocked:${process.env.EMOJI_ANNOUNCEMENT_LOCKED}>`
                                         ]
                                     ][announcement.published ? 0 : 1][announcement.isUpdate ? 0 : 1]
                                 }  ${announcement.title} (\`${announcement.id}\`)`
@@ -54,7 +54,7 @@ async function buildAnnouncementsMessage(): Promise<CreateMessageOptions> {
                             customID: `showannouncement-${announcement.id}`,
                             emoji: {
                                 name: "more",
-                                id: "1416346342120357939",
+                                id: process.env.EMOJI_MORE,
                                 animated: false
                             },
                             style: ButtonStyles.PRIMARY

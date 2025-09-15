@@ -46,7 +46,7 @@ async function buildContributorMessage(): Promise<CreateMessageOptions> {
                             customID: `rmcontrib-${contributor.id}`,
                             emoji: {
                                 name: "delete",
-                                id: "1416328520292110346",
+                                id: process.env.EMOJI_DELETE,
                                 animated: false
                             },
                             style: ButtonStyles.DANGER

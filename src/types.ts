@@ -35,7 +35,7 @@ export type Command = {
     name: string;
     description: string;
     admin?: boolean;
-    exec: (msg: Message) => Promise<string | CreateMessageOptions>;
+    exec: (msg: Message) => Promise<string | CreateMessageOptions | null>;
     components?: AnyInteractionHandler[];
 };
 
