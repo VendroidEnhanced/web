@@ -89,7 +89,7 @@ export async function buildAnalyticsMessage(range: "24h" | "all"): Promise<Creat
                                     fillStyle: (dataset.backgroundColor as string[])[index],
                                     hidden: false,
                                     index,
-                                    fontColor: (dataset.backgroundColor as string[])[index]
+                                    fontColor: "#5865F2"
                                 };
                             });
                         }
