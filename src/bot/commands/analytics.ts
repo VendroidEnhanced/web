@@ -5,9 +5,7 @@ import { Canvas } from "skia-canvas";
 import { ArcElement, CategoryScale, Chart, Legend, PieController } from "chart.js";
 
 function getRandomColor(): string {
-    return `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(
-        Math.random() * 256
-    )}, ${Math.floor(Math.random() * 256)})`.replaceAll("\n", "");
+    return `hsl(${Math.floor(Math.random() * 361)} 75.4% 69.3%)`.replaceAll("\n", "");
 }
 
 export async function buildAnalyticsMessage(range: "24h" | "all"): Promise<CreateMessageOptions> {
@@ -20,6 +18,7 @@ export async function buildAnalyticsMessage(range: "24h" | "all"): Promise<Creat
             all: 0
         }[range]
     );
+
     const versions: number[] = requests.map(r => r.appVer || 0);
     const unsortedCountPerVersion: { [version: number]: number } = {};
     for (const entry of versions) {
