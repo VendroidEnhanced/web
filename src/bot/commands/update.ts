@@ -5,8 +5,16 @@ import { ButtonStyles, ComponentTypes } from "oceanic.js";
 
 export default defineCommand({
     name: "update",
-    description: "Updates the VendroidEnhanced landing page",
+    description: "Updates the VendroidEnhanced landing page & bot",
     async exec(msg) {
+        await msg.channel?.createMessage({
+            content: "## Updating bot"
+        });
+        execSync("git pull");
+        execSync("pnpm build");
+        await msg.channel?.createMessage({
+            content: "## Updating landing page"
+        });
         try {
             rmSync("site", {
                 recursive: true,
