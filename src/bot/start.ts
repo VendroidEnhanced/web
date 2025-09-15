@@ -19,6 +19,7 @@ import help from "./commands/help";
 import analytics, { buildAnalyticsMessage } from "./commands/analytics";
 import addVer from "./commands/addVer";
 import say from "./commands/say";
+import restart from "./commands/restart";
 
 export const commands: Command[] = [
     analytics,
@@ -29,7 +30,8 @@ export const commands: Command[] = [
     contributors,
     announcements,
     addVer,
-    say
+    say,
+    restart
 ];
 
 export const bot = new Client({
