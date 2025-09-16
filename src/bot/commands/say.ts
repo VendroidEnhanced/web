@@ -3,6 +3,7 @@ import { defineCommand } from "../../types";
 
 export default defineCommand({
     name: "say",
+    aliases: ["echo"],
     description: "Say something",
     async exec(msg) {
         await msg.channel?.createMessage({
@@ -10,7 +11,7 @@ export default defineCommand({
             components: [
                 {
                     type: ComponentTypes.TEXT_DISPLAY,
-                    content: msg.content.replace(`${process.env.PREFIX}say `, "")
+                    content: msg.content.split(" ").slice(1).join(" ")
                 }
             ]
         });

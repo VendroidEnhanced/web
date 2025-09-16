@@ -33,6 +33,7 @@ type AnyInteractionHandler =
 
 export type Command = {
     name: string;
+    aliases?: string[];
     description: string;
     admin?: boolean;
     exec: (msg: Message) => Promise<string | CreateMessageOptions | null>;
@@ -55,6 +56,7 @@ export const Duration = {
 export function defineCommand(command: Command): Command {
     return {
         name: command.name,
+        aliases: command.aliases || [],
         description: command.description,
         exec: command.exec,
         components: command.components,

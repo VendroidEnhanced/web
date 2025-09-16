@@ -3,6 +3,7 @@ import { commands } from "../start";
 
 export default defineCommand({
     name: "help",
+    aliases: ["?", "shelp", "theylp"],
     description: "Shows this message",
     async exec(msg) {
         return commands
@@ -21,8 +22,10 @@ export default defineCommand({
             .map(
                 command =>
                     `**\`${command.name}\`**${
-                        command.admin ? ` <:owner:${process.env.EMOJI_OWNER}>` : ""
-                    } ~ ${command.description}`
+                        command.aliases!.length ? ` *(${command.aliases!.join(", ")})*` : ""
+                    }${command.admin ? ` <:owner:${process.env.EMOJI_OWNER}>` : ""} ~ ${
+                        command.description
+                    }`
             )
             .join("\n");
     },

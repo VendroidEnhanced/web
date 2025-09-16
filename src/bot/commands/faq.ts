@@ -39,6 +39,7 @@ function buildFAQMessage(id: string, invokingUser?: User) {
 
 export default defineCommand({
     name: "faq",
+    aliases: ["f"],
     description: "See the FAQ or get an entry",
     admin: false,
     // @ts-expect-error

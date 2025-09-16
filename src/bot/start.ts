@@ -73,7 +73,7 @@ bot.on("messageCreate", async msg => {
         const command = msg.content.split(/( |\n)/)[0].replace(process.env.PREFIX!, "");
 
         for (const cd of commands) {
-            if (cd.name === command) {
+            if (cd.name === command || cd.aliases!.includes(command)) {
                 if (cd.admin && msg.author.id !== process.env.ADMIN_ID)
                     return msg.createReaction("💢");
 
