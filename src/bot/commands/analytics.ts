@@ -1,8 +1,9 @@
 import { ButtonStyles, ComponentTypes, CreateMessageOptions, MessageFlags } from "oceanic.js";
 import { db } from "../../database";
-import { defineCommand } from "../../types";
+import { defineCommand, Duration } from "../../types";
 import { Canvas } from "skia-canvas";
 import { ArcElement, CategoryScale, Chart, Legend, PieController } from "chart.js";
+import { bot } from "../start";
 
 function getRandomColor(): string {
     return `hsl(${Math.floor(Math.random() * 361)} 75.4% 69.3%)`.replaceAll("\n", "");
@@ -196,5 +197,17 @@ export default defineCommand({
                 });
             }
         }
-    ]
+    ],
+    tasks: {
+        updateAnalytics: {
+            interval: 10 * Duration.MINUTE,
+            async exec() {
+                bot.rest.channels.editMessage(
+                    process.env.ANALYTICS_CHANNEL_ID!,
+                    process.env.ANALYTICS_MESSAGE_ID!,
+                    await buildAnalyticsMessage("24h")
+                );
+            }
+        }
+    }
 });

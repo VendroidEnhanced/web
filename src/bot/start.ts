@@ -20,6 +20,7 @@ import analytics, { buildAnalyticsMessage } from "./commands/analytics";
 import addVer from "./commands/addVer";
 import say from "./commands/say";
 import restart from "./commands/restart";
+import faq from "./commands/faq";
 
 export const commands: Command[] = [
     analytics,
@@ -31,7 +32,8 @@ export const commands: Command[] = [
     announcements,
     addVer,
     say,
-    restart
+    restart,
+    faq
 ];
 
 export const bot = new Client({
@@ -47,30 +49,18 @@ export const bot = new Client({
     }
 });
 
-const updatePredefinedAnalyticsMessage = async () =>
-    bot.rest.channels.editMessage(
-        process.env.ANALYTICS_CHANNEL_ID!,
-        process.env.ANALYTICS_MESSAGE_ID!,
-        await buildAnalyticsMessage("24h")
-    );
+const disabledTasks: string[] = [];
 
 bot.on("ready", async () => {
     console.log("Discord connected as", bot.user.tag);
 
-    setInterval(updatePredefinedAnalyticsMessage, 600000);
-    updatePredefinedAnalyticsMessage();
-});
-
-bot.on("messageReactionAdd", async msg => {
-    if (
-        msg.id === process.env.ANALYTICS_MESSAGE_ID! &&
-        msg.channelID === process.env.ANALYTICS_CHANNEL_ID!
-    ) {
-        await updatePredefinedAnalyticsMessage();
-        await bot.rest.channels.deleteReactions(
-            process.env.ANALYTICS_CHANNEL_ID!,
-            process.env.ANALYTICS_MESSAGE_ID!
-        );
+    for (const command of commands.filter(c => c.tasks)) {
+        for (const [id, task] of Object.entries(command.tasks!)) {
+            await task.exec();
+            setInterval(() => {
+                if (!disabledTasks.includes(id)) task.exec();
+            }, task.interval);
+        }
     }
 });
 

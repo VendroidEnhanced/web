@@ -37,6 +37,19 @@ export type Command = {
     admin?: boolean;
     exec: (msg: Message) => Promise<string | CreateMessageOptions | null>;
     components?: AnyInteractionHandler[];
+    tasks?: {
+        [id: string]: {
+            interval: number;
+            exec: () => void;
+        };
+    };
+};
+
+export const Duration = {
+    SECOND: 1000,
+    MINUTE: 60 * 1000,
+    HOUR: 60 * 60 * 1000,
+    DAY: 24 * 60 * 60 * 1000
 };
 
 export function defineCommand(command: Command): Command {
@@ -48,6 +61,7 @@ export function defineCommand(command: Command): Command {
         admin: (() => {
             if (typeof command.admin === "undefined") return true;
             else return command.admin;
-        })()
+        })(),
+        tasks: command.tasks
     };
 }

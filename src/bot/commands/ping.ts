@@ -1,4 +1,4 @@
-import { defineCommand } from "../../types";
+import { defineCommand, Duration } from "../../types";
 
 export default defineCommand({
     name: "ping",
