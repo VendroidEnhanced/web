@@ -1,4 +1,4 @@
-import { ComponentTypes, MessageFlags } from "oceanic.js";
+import { ComponentTypes, MessageFlags, User } from "oceanic.js";
 import { defineCommand, Duration } from "../../types";
 
 let faq: {
@@ -8,11 +8,74 @@ let faq: {
     };
 };
 
+function buildFAQMessage(id: string, invokingUser?: User) {
+    return {
+        flags: MessageFlags.IS_COMPONENTS_V2,
+        components: [
+            {
+                type: ComponentTypes.CONTAINER,
+                components: [
+                    {
+                        type: ComponentTypes.TEXT_DISPLAY,
+                        content: `### ${faq[id].q}`
+                    },
+                    {
+                        type: ComponentTypes.TEXT_DISPLAY,
+                        content: faq[id].a
+                    },
+                    ...(invokingUser
+                        ? [
+                              {
+                                  type: ComponentTypes.TEXT_DISPLAY,
+                                  content: `-# Auto-response invoked by ${invokingUser.tag}`
+                              }
+                          ]
+                        : [])
+                ]
+            }
+        ]
+    };
+}
+
 export default defineCommand({
     name: "faq",
     description: "See the FAQ or get an entry",
     admin: false,
+    // @ts-expect-error
     async exec(msg) {
+        if (msg.content.split(" ").length > 1) {
+            const [, id] = msg.content.split(" ");
+
+            if (faq[id]) {
+                if (msg.referencedMessage) {
+                    msg.delete();
+                    await msg.channel?.createMessage(
+                        // @ts-expect-error
+                        {
+                            ...buildFAQMessage(id, msg.author),
+                            messageReference: {
+                                channelID: msg.channelID,
+                                guildID: msg.guildID!,
+                                messageID: msg.referencedMessage.id
+                            },
+                            allowedMentions: {
+                                repliedUser: true,
+                                users: false,
+                                roles: false,
+                                everyone: false
+                            }
+                        }
+                    );
+                    return null;
+                }
+
+                return buildFAQMessage(id);
+            } else {
+                await msg.createReaction("❓");
+                return null;
+            }
+        }
+
         return {
             flags: MessageFlags.IS_COMPONENTS_V2,
             components: [
