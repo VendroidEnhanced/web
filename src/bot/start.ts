@@ -70,7 +70,10 @@ bot.on("messageCreate", async msg => {
     if (msg.guildID !== process.env.ALLOWED_GUILD) return;
 
     if (msg.content.startsWith(process.env.PREFIX!)) {
-        const command = msg.content.split(/( |\n)/)[0].replace(process.env.PREFIX!, "");
+        const command = msg.content
+            .toLowerCase()
+            .split(/( |\n)/)[0]
+            .replace(process.env.PREFIX!, "");
 
         for (const cd of commands) {
             if (cd.name === command || cd.aliases!.includes(command)) {
