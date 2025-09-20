@@ -45,7 +45,7 @@ export default defineCommand({
     // @ts-expect-error
     async exec(msg) {
         if (msg.content.split(" ").length > 1) {
-            const [, id] = msg.content.split(" ");
+            const [, id] = msg.content.toLowerCase().split(" ");
 
             if (faq[id]) {
                 if (msg.referencedMessage) {
