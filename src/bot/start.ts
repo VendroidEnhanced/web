@@ -1,10 +1,14 @@
 import {
     AllIntents,
+    ApplicationCommandTypes,
+    ApplicationIntegrationTypes,
     Client,
     ComponentTypes,
     GuildComponentButtonInteraction,
     GuildComponentSelectMenuInteraction,
     GuildModalSubmitInteraction,
+    IntegrationTypes,
+    InteractionContextTypes,
     InteractionTypes,
     MessageFlags,
     MessageReference
@@ -21,6 +25,7 @@ import addVer from "./commands/addVer";
 import say from "./commands/say";
 import restart from "./commands/restart";
 import faq from "./commands/faq";
+import when from "./commands/when";
 
 export const commands: Command[] = [
     analytics,
@@ -33,7 +38,8 @@ export const commands: Command[] = [
     addVer,
     say,
     restart,
-    faq
+    faq,
+    when
 ];
 
 export const bot = new Client({
@@ -50,10 +56,31 @@ export const bot = new Client({
 });
 
 const disabledTasks: string[] = [];
+let taskHandlersSetup = false;
 
 bot.on("ready", async () => {
     console.log("Discord connected as", bot.user.tag);
 
+    await bot.application.bulkEditGlobalCommands(
+        commands
+            .filter(cmd => ["hybrid", "slash"].includes(cmd.mode!))
+            .map(cmd => ({
+                name: cmd.name,
+                description: cmd.description,
+                integrationTypes: [
+                    ApplicationIntegrationTypes.GUILD_INSTALL,
+                    ApplicationIntegrationTypes.USER_INSTALL
+                ],
+                type: ApplicationCommandTypes.CHAT_INPUT,
+                contexts: [
+                    InteractionContextTypes.GUILD,
+                    InteractionContextTypes.BOT_DM,
+                    InteractionContextTypes.PRIVATE_CHANNEL
+                ]
+            }))
+    );
+
+    if (taskHandlersSetup) return;
     for (const command of commands.filter(c => c.tasks)) {
         for (const [id, task] of Object.entries(command.tasks!)) {
             await task.exec();
@@ -75,11 +102,12 @@ bot.on("messageCreate", async msg => {
             .split(/( |\n)/)[0]
             .replace(process.env.PREFIX!, "");
 
-        for (const cd of commands) {
+        for (const cd of commands.filter(cmd => ["hybrid", "text"].includes(cmd.mode!))) {
             if (cd.name === command || cd.aliases!.includes(command)) {
                 if (cd.admin && msg.author.id !== process.env.ADMIN_ID)
                     return msg.createReaction("💢");
 
+                // @ts-expect-error
                 const returnValue = await cd.exec(msg);
                 const messageReference: MessageReference = {
                     guildID: msg.guildID,
@@ -104,6 +132,29 @@ bot.on("messageCreate", async msg => {
 
 bot.on("interactionCreate", async interaction => {
     switch (interaction.type) {
+        case InteractionTypes.APPLICATION_COMMAND:
+            for (const cd of commands.filter(cmd => ["slash"].includes(cmd.mode!))) {
+                if (cd.name === interaction.data.name) {
+                    if (cd.admin && interaction.user.id !== process.env.ADMIN_ID)
+                        return void (await interaction.createMessage({
+                            content: "💢 You can't do this!",
+                            flags: MessageFlags.EPHEMERAL
+                        }));
+
+                    // @ts-expect-error
+                    const returnValue = await cd.exec(interaction);
+
+                    if (!returnValue) return;
+                    typeof returnValue === "string"
+                        ? await interaction.createMessage({
+                              content: returnValue
+                          })
+                        : await interaction.createMessage({
+                              ...returnValue
+                          });
+                }
+            }
+            break;
         case InteractionTypes.MODAL_SUBMIT: {
             for (const command of commands) {
                 if (command.components) {

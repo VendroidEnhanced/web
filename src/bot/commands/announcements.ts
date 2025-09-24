@@ -166,7 +166,8 @@ async function buildAnnouncementMessage(id: number): Promise<CreateMessageOption
 export default defineCommand({
     name: "announcements",
     description: "Manage announcements",
-    async exec(msg) {
+    mode: "text",
+    async exec() {
         return await buildAnnouncementsMessage();
     },
     components: [

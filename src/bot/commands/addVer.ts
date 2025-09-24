@@ -4,6 +4,7 @@ import { defineCommand } from "../../types";
 export default defineCommand({
     name: "addver",
     description: "Allowlist a version for analytics",
+    mode: "text",
     async exec(msg) {
         const [, id, value] = msg.content.split(" ");
         await db.run("INSERT INTO versions VALUES (?, ?)", id, value);

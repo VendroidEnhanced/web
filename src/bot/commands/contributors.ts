@@ -73,7 +73,8 @@ async function buildContributorMessage(): Promise<CreateMessageOptions> {
 export default defineCommand({
     name: "contributors",
     description: "Manage contributor badges",
-    async exec(msg) {
+    mode: "text",
+    async exec() {
         return await buildContributorMessage();
     },
     components: [

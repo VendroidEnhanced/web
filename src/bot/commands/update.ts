@@ -6,6 +6,7 @@ import { ButtonStyles, ComponentTypes } from "oceanic.js";
 export default defineCommand({
     name: "update",
     description: "Updates the VendroidEnhanced landing page & bot",
+    mode: "text",
     async exec(msg) {
         await msg.channel?.createMessage({
             content: "## Updating bot"

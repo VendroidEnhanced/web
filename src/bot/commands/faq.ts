@@ -42,6 +42,7 @@ export default defineCommand({
     aliases: ["f"],
     description: "See the FAQ or get an entry",
     admin: false,
+    mode: "text",
     // @ts-expect-error
     async exec(msg) {
         if (msg.content.split(" ").length > 1) {

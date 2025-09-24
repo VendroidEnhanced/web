@@ -183,7 +183,8 @@ export default defineCommand({
     name: "analytics",
     description: "Display version statistics",
     admin: false,
-    async exec(_msg) {
+    mode: "text",
+    async exec() {
         return await buildAnalyticsMessage("24h");
     },
     components: [

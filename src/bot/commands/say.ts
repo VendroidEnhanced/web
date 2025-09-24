@@ -5,6 +5,7 @@ export default defineCommand({
     name: "say",
     aliases: ["echo"],
     description: "Say something",
+    mode: "text",
     async exec(msg) {
         await msg.channel?.createMessage({
             flags: MessageFlags.IS_COMPONENTS_V2,

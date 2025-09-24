@@ -5,8 +5,10 @@ export default defineCommand({
     name: "help",
     aliases: ["?", "shelp", "theylp"],
     description: "Shows this message",
+    mode: "text",
     async exec(msg) {
         return commands
+            .filter(cmd => ["hybrid", "text"].includes(cmd.mode!))
             .toSorted((a, b) => {
                 if (a.name < b.name) return -1;
                 if (a.name > b.name) return 1;

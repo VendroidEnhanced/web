@@ -1,4 +1,5 @@
 import {
+    CommandInteraction,
     CreateMessageOptions,
     GuildComponentButtonInteraction,
     GuildComponentSelectMenuInteraction,
@@ -31,12 +32,11 @@ type AnyInteractionHandler =
     | SelectInteractionHandler
     | ModalInteractionHandler;
 
-export type Command = {
+interface BaseCommand {
     name: string;
     aliases?: string[];
     description: string;
     admin?: boolean;
-    exec: (msg: Message) => Promise<string | CreateMessageOptions | null>;
     components?: AnyInteractionHandler[];
     tasks?: {
         [id: string]: {
@@ -44,7 +44,20 @@ export type Command = {
             exec: () => void;
         };
     };
-};
+    mode?: "text" | "slash";
+}
+
+interface SlashCommand extends BaseCommand {
+    mode?: "slash";
+    exec: (msg: CommandInteraction) => Promise<string | CreateMessageOptions | null>;
+}
+
+interface TextCommand extends BaseCommand {
+    mode?: "text";
+    exec: (msg: Message) => Promise<string | CreateMessageOptions | null>;
+}
+
+export type Command = SlashCommand | TextCommand;
 
 export const Duration = {
     SECOND: 1000,
@@ -54,6 +67,7 @@ export const Duration = {
 };
 
 export function defineCommand(command: Command): Command {
+    // @ts-expect-error
     return {
         name: command.name,
         aliases: command.aliases || [],
@@ -63,6 +77,10 @@ export function defineCommand(command: Command): Command {
         admin: (() => {
             if (typeof command.admin === "undefined") return true;
             else return command.admin;
+        })(),
+        mode: (() => {
+            if (typeof command.mode === "undefined") return "text";
+            else return command.mode;
         })(),
         tasks: command.tasks
     };
