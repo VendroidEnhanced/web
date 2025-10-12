@@ -25,7 +25,7 @@ import addVer from "./commands/addVer";
 import say from "./commands/say";
 import restart from "./commands/restart";
 import faq from "./commands/faq";
-import when from "./commands/when";
+import getAbandonware from "./commands/get-abandonware";
 
 export const commands: Command[] = [
     analytics,
@@ -39,7 +39,7 @@ export const commands: Command[] = [
     say,
     restart,
     faq,
-    when
+    getAbandonware
 ];
 
 export const bot = new Client({
@@ -76,7 +76,8 @@ bot.on("ready", async () => {
                     InteractionContextTypes.GUILD,
                     InteractionContextTypes.BOT_DM,
                     InteractionContextTypes.PRIVATE_CHANNEL
-                ]
+                ],
+                options: cmd.options
             }))
     );
 
@@ -141,15 +142,16 @@ bot.on("interactionCreate", async interaction => {
                             flags: MessageFlags.EPHEMERAL
                         }));
 
+                    await interaction.defer();
                     // @ts-expect-error
                     const returnValue = await cd.exec(interaction);
 
                     if (!returnValue) return;
                     typeof returnValue === "string"
-                        ? await interaction.createMessage({
+                        ? await interaction.createFollowup({
                               content: returnValue
                           })
-                        : await interaction.createMessage({
+                        : await interaction.createFollowup({
                               ...returnValue
                           });
                 }

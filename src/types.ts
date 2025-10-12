@@ -1,4 +1,5 @@
 import {
+    ApplicationCommandOptions,
     CommandInteraction,
     CreateMessageOptions,
     GuildComponentButtonInteraction,
@@ -44,16 +45,19 @@ interface BaseCommand {
             exec: () => void;
         };
     };
+    options?: ApplicationCommandOptions[];
     mode?: "text" | "slash";
 }
 
 interface SlashCommand extends BaseCommand {
     mode?: "slash";
+    options: ApplicationCommandOptions[];
     exec: (msg: CommandInteraction) => Promise<string | CreateMessageOptions | null>;
 }
 
 interface TextCommand extends BaseCommand {
     mode?: "text";
+    options: ApplicationCommandOptions[];
     exec: (msg: Message) => Promise<string | CreateMessageOptions | null>;
 }
 
@@ -82,6 +86,7 @@ export function defineCommand(command: Command): Command {
             if (typeof command.mode === "undefined") return "text";
             else return command.mode;
         })(),
+        options: command.options || [],
         tasks: command.tasks
     };
 }
