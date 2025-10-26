@@ -51,13 +51,13 @@ interface BaseCommand {
 
 interface SlashCommand extends BaseCommand {
     mode?: "slash";
-    options: ApplicationCommandOptions[];
+    options?: ApplicationCommandOptions[];
     exec: (msg: CommandInteraction) => Promise<string | CreateMessageOptions | null>;
 }
 
 interface TextCommand extends BaseCommand {
     mode?: "text";
-    options: ApplicationCommandOptions[];
+    options?: ApplicationCommandOptions[];
     exec: (msg: Message) => Promise<string | CreateMessageOptions | null>;
 }
 

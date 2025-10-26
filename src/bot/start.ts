@@ -26,6 +26,7 @@ import say from "./commands/say";
 import restart from "./commands/restart";
 import faq from "./commands/faq";
 import getAbandonware from "./commands/get-abandonware";
+import eight8x31 from "./commands/88x31";
 
 export const commands: Command[] = [
     analytics,
@@ -39,7 +40,8 @@ export const commands: Command[] = [
     say,
     restart,
     faq,
-    getAbandonware
+    getAbandonware,
+    eight8x31
 ];
 
 export const bot = new Client({
