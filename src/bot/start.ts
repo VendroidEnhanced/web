@@ -27,6 +27,7 @@ import restart from "./commands/restart";
 import faq from "./commands/faq";
 import getAbandonware from "./commands/get-abandonware";
 import eight8x31 from "./commands/88x31";
+import stick, { buildStick, setStick, stickies } from "./commands/stick";
 
 export const commands: Command[] = [
     analytics,
@@ -41,7 +42,8 @@ export const commands: Command[] = [
     restart,
     faq,
     getAbandonware,
-    eight8x31
+    eight8x31,
+    stick
 ];
 
 export const bot = new Client({
@@ -129,6 +131,14 @@ bot.on("messageCreate", async msg => {
                           messageReference
                       });
             }
+        }
+    } else {
+        const sticker = await buildStick(msg.channelID);
+        if (sticker) {
+            if (stickies[msg.channelID])
+                await bot.rest.channels.deleteMessage(msg.channelID, stickies[msg.channelID]!);
+            const smsg = await msg.channel?.createMessage(sticker);
+            setStick(smsg!.channelID, smsg!.id);
         }
     }
 });

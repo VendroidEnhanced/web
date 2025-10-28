@@ -38,4 +38,10 @@ export async function init() {
             name TEXT NOT NULL
         )
     `);
+    await db.exec(`
+        CREATE TABLE IF NOT EXISTS stick (
+            channel TEXT NOT NULL,
+            id TEXT NOT NULL
+        )
+    `);
 }
