@@ -19,7 +19,8 @@ export async function buildStick(channelID: string): Promise<CreateMessageOption
                 color: 0xea95a2,
                 author: {
                     name: tMsg.author.tag,
-                    iconURL: tMsg.author.avatarURL("png")
+                    iconURL: tMsg.author.avatarURL("png"),
+                    url: tMsg.jumpLink
                 },
                 description: `### 📌 Pinned Message\n${tMsg.content}`
             }
