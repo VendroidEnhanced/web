@@ -282,6 +282,13 @@ export default defineCommand({
 
         const publicMessage = await interaction.createFollowup({
             content: `${challenged.mention}, ${interaction.user.mention} has challenged you to a Connect 4 game.`,
+            embeds: [
+                {
+                    title: "Instructions",
+                    description:
+                        "Connect 4 is a game where you can throw pieces in columns. Each person has a color.\nWhen you put a piece in a column, it will go as low as possible.\nTo win, put 4 pieces of your color next to each other either vertically, horizontally, or diagonally."
+                }
+            ],
             allowedMentions: {
                 users: true,
                 roles: true,
