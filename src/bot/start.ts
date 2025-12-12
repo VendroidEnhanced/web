@@ -26,6 +26,7 @@ import say from "./commands/say";
 import restart from "./commands/restart";
 import faq from "./commands/faq";
 import getAbandonware from "./commands/get-abandonware";
+import connectFour from "./commands/connectFour";
 import eight8x31 from "./commands/88x31";
 import stick, { buildStick, setStick, stickies } from "./commands/stick";
 import { app } from "..";
@@ -34,6 +35,7 @@ export const commands: Command[] = [
     analytics,
     help,
     ping,
+    connectFour,
     build,
     update,
     contributors,
@@ -67,34 +69,34 @@ bot.on("ready", async () => {
     console.log("Discord connected as", bot.user.tag);
 
     try {
-    await bot.application.bulkEditGlobalCommands(
-        commands
-            .filter(cmd => ["hybrid", "slash"].includes(cmd.mode!))
-            .map(cmd => ({
-                name: cmd.name,
-                description: cmd.description,
-                integrationTypes: [
-                    ApplicationIntegrationTypes.GUILD_INSTALL,
-                    ApplicationIntegrationTypes.USER_INSTALL
-                ],
-                type: ApplicationCommandTypes.CHAT_INPUT,
-                contexts: [
-                    InteractionContextTypes.GUILD,
-                    InteractionContextTypes.BOT_DM,
-                    InteractionContextTypes.PRIVATE_CHANNEL
-                ],
-                options: cmd.options
-            }))
-    );
+        await bot.application.bulkEditGlobalCommands(
+            commands
+                .filter(cmd => ["hybrid", "slash"].includes(cmd.mode!))
+                .map(cmd => ({
+                    name: cmd.name,
+                    description: cmd.description,
+                    integrationTypes: [
+                        ApplicationIntegrationTypes.GUILD_INSTALL,
+                        ApplicationIntegrationTypes.USER_INSTALL
+                    ],
+                    type: ApplicationCommandTypes.CHAT_INPUT,
+                    contexts: [
+                        InteractionContextTypes.GUILD,
+                        InteractionContextTypes.BOT_DM,
+                        InteractionContextTypes.PRIVATE_CHANNEL
+                    ],
+                    options: cmd.options
+                }))
+        );
     } catch {}
 
     if (!taskHandlersSetup) {
-    for (const command of commands.filter(c => c.tasks)) {
-        for (const [id, task] of Object.entries(command.tasks!)) {
-            await task.exec();
-            setInterval(() => {
-                if (!disabledTasks.includes(id)) task.exec();
-            }, task.interval);
+        for (const command of commands.filter(c => c.tasks)) {
+            for (const [id, task] of Object.entries(command.tasks!)) {
+                await task.exec();
+                setInterval(() => {
+                    if (!disabledTasks.includes(id)) task.exec();
+                }, task.interval);
             }
         }
     }
