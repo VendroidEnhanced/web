@@ -181,23 +181,24 @@ class C4Game {
         };
     }
 
-    getGridText(allowLinks: boolean, user?: 1 | 2) {
+    getGridText(allowLinks: boolean, user?: 1 | 2, winningTiles: number[][] = []) {
         return this.grid
             .map((line, ri) =>
                 line
                     .map((item, ci) => {
                         let symbol = "";
+                        const isWinTile = winningTiles.some(t => t[0] === ri && t[1] === ci);
                         switch (item) {
                             case Value.BLANK: {
                                 symbol = "🔳";
                                 break;
                             }
                             case Value.RED: {
-                                symbol = "🔴";
+                                symbol = isWinTile ? "❤️" : "🔴";
                                 break;
                             }
                             case Value.YELLOW: {
-                                symbol = "🟡";
+                                symbol = isWinTile ? "💛" : "🟡";
                                 break;
                             }
                         }
@@ -403,7 +404,7 @@ ${outcome.side === Value.YELLOW ? "🔴" : "🟡"} ${loser.mention} lost.`,
                             {
                                 title: "Connect 4",
                                 color: outcome.side === Value.RED ? 0xdb273b : 0xffff00,
-                                description: game.getGridText(false)
+                                description: game.getGridText(false, 1, outcome.winningTiles)
                             }
                         ]
                     });
