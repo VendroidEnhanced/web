@@ -1,9 +1,9 @@
 import express, { Express, Request, Response } from "express";
-import { bot, connect } from "./bot/start";
+import { connect } from "./bot/start";
 import { db, init } from "./database";
 import { fuckCors } from "./cors";
 
-const app: Express = express();
+export const app: Express = express();
 const port = process.env.PORT || 8637;
 
 connect();

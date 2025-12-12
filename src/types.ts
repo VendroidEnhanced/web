@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import {
     ApplicationCommandOptions,
     CommandInteraction,
@@ -45,6 +46,9 @@ interface BaseCommand {
             exec: () => void;
         };
     };
+    web?: {
+        [path: string]: (req: Request, res: Response) => void;
+    };
     options?: ApplicationCommandOptions[];
     mode?: "text" | "slash";
 }
@@ -87,6 +91,7 @@ export function defineCommand(command: Command): Command {
             else return command.mode;
         })(),
         options: command.options || [],
-        tasks: command.tasks
+        tasks: command.tasks,
+        web: command.web
     };
 }
