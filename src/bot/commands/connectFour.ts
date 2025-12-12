@@ -83,93 +83,75 @@ class C4Game {
             for (const item of row) {
                 if (item === Value.BLANK) canBeDraw = false;
                 if (item !== Value.BLANK) {
-                    if (ci < 4) {
-                        // check horizontal
-                        if (
-                            [
-                                this.grid[ri][ci],
-                                this.grid[ri][ci + 1],
-                                this.grid[ri][ci + 2],
-                                this.grid[ri][ci + 3]
-                            ].every(t => t === item)
-                        ) {
-                            return {
-                                result: "win",
-                                side: item,
-                                winningTiles: [
-                                    [ri, ci],
-                                    [ri, ci + 1],
-                                    [ri, ci + 2],
-                                    [ri, ci + 3]
-                                ]
-                            };
-                        }
+                    if (
+                        ci <= 3 &&
+                        item === this.grid[ri][ci + 1] &&
+                        item === this.grid[ri][ci + 2] &&
+                        item === this.grid[ri][ci + 3]
+                    ) {
+                        return {
+                            result: "win",
+                            side: item,
+                            winningTiles: [
+                                [ri, ci],
+                                [ri, ci + 1],
+                                [ri, ci + 2],
+                                [ri, ci + 3]
+                            ]
+                        };
                     }
-                    if (ri < 3) {
-                        // check vertical
-                        if (
-                            [
-                                this.grid[ri][ci],
-                                this.grid[ri + 1][ci],
-                                this.grid[ri + 2][ci],
-                                this.grid[ri + 3][ci]
-                            ].every(t => t === item)
-                        ) {
-                            return {
-                                result: "win",
-                                side: item,
-                                winningTiles: [
-                                    [ri, ci],
-                                    [ri + 1, ci],
-                                    [ri + 2, ci],
-                                    [ri + 3, ci]
-                                ]
-                            };
-                        }
+                    if (
+                        ri <= 2 &&
+                        item === this.grid[ri + 1][ci] &&
+                        item === this.grid[ri + 2][ci] &&
+                        item === this.grid[ri + 3][ci]
+                    ) {
+                        return {
+                            result: "win",
+                            side: item,
+                            winningTiles: [
+                                [ri, ci],
+                                [ri + 1, ci],
+                                [ri + 2, ci],
+                                [ri + 3, ci]
+                            ]
+                        };
                     }
-                    if (ci > 2 && ri < 3) {
-                        // check diag-left
-                        if (
-                            [
-                                this.grid[ri][ci],
-                                this.grid[ri + 1][ci - 1],
-                                this.grid[ri + 2][ci - 2],
-                                this.grid[ri + 2][ci - 3]
-                            ].every(t => t === item)
-                        ) {
-                            return {
-                                result: "win",
-                                side: item,
-                                winningTiles: [
-                                    [ri, ci],
-                                    [ri + 1, ci - 1],
-                                    [ri + 2, ci - 2],
-                                    [ri + 3, ci - 3]
-                                ]
-                            };
-                        }
+                    if (
+                        ri <= 2 &&
+                        ci <= 3 &&
+                        item === this.grid[ri + 1][ci + 1] &&
+                        item === this.grid[ri + 2][ci + 2] &&
+                        item === this.grid[ri + 3][ci + 3]
+                    ) {
+                        return {
+                            result: "win",
+                            side: item,
+                            winningTiles: [
+                                [ri, ci],
+                                [ri + 1, ci + 1],
+                                [ri + 2, ci + 2],
+                                [ri + 3, ci + 3]
+                            ]
+                        };
                     }
-                    if (ci < 4 && ri < 3) {
-                        // check diag-right
-                        if (
-                            [
-                                this.grid[ri][ci],
-                                this.grid[ri + 1][ci + 1],
-                                this.grid[ri + 2][ci + 2],
-                                this.grid[ri + 2][ci + 3]
-                            ].every(t => t === item)
-                        ) {
-                            return {
-                                result: "win",
-                                side: item,
-                                winningTiles: [
-                                    [ri, ci],
-                                    [ri + 1, ci + 1],
-                                    [ri + 2, ci + 2],
-                                    [ri + 3, ci + 3]
-                                ]
-                            };
-                        }
+                    if (
+                        ri <= 2 &&
+                        ci >= 3 &&
+                        item === this.grid[ri + 1][ci - 1] &&
+                        item === this.grid[ri + 2][ci - 2] &&
+                        item === this.grid[ri + 3][ci - 3]
+                    ) {
+                        return {
+                            result: "win",
+                            side: item,
+                            winningTiles: [
+                                [ri, ci],
+                                [ri + 1, ci - 1],
+                                [ri + 2, ci - 2],
+                                [ri + 3, ci - 3]
+                            ]
+                        };
                     }
                 }
                 ci++;
