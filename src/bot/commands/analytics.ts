@@ -203,11 +203,13 @@ export default defineCommand({
         updateAnalytics: {
             interval: 10 * Duration.MINUTE,
             async exec() {
-                bot.rest.channels.editMessage(
-                    process.env.ANALYTICS_CHANNEL_ID!,
-                    process.env.ANALYTICS_MESSAGE_ID!,
-                    await buildAnalyticsMessage("24h")
-                );
+                try {
+                    await bot.rest.channels.editMessage(
+                        process.env.ANALYTICS_CHANNEL_ID!,
+                        process.env.ANALYTICS_MESSAGE_ID!,
+                        await buildAnalyticsMessage("24h")
+                    );
+                } catch {}
             }
         }
     }
