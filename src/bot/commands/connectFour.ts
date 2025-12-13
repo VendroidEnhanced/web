@@ -222,7 +222,7 @@ function getGame(id: string): C4Game | undefined {
 }
 const games: C4Game[] = [];
 
-function h1(string: string) {
+function h1(string: string, close: boolean = false) {
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -242,6 +242,9 @@ function h1(string: string) {
             background-color: #202020;
         }
     </style>
+    ${close ? `<script>
+        window.close()
+</script>` : ""}
 </head>
 <body>
     <h1>${string}</h1>
@@ -453,7 +456,7 @@ ${outcome.side === Value.YELLOW ? "🔴" : "🟡"} ${loser.mention} lost.`,
                     break;
                 }
             }
-            res.send(h1("Go back to Discord."));
+            res.send(h1("Go back to Discord.", true));
         }
     },
     components: [
