@@ -112,6 +112,31 @@ bot.on("messageCreate", async msg => {
     if (!msg.guild) return;
     if (msg.guildID !== process.env.ALLOWED_GUILD) return;
 
+    if (
+        msg.guildID === process.env.ALLOWED_GUILD &&
+        msg.channelID === process.env.GUILD_PFP_CHANNEL &&
+        !msg.author.bot
+    ) {
+        if (msg.attachments.empty && msg.content.length === 0) return;
+        const at = !msg.attachments.empty
+            ? msg.attachments.first()!.url
+            : msg.content.includes("https://")
+              ? msg.content
+              : (() => {
+                    throw "failed";
+                })();
+        const res = await fetch(at);
+        const arrayBuffer = await res.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        await msg.guild.edit({
+            icon: buffer,
+            reason: `Server icon edited by ${msg.author.tag}`
+        });
+        await msg.channel?.createMessage({
+            content: "Done!"
+        });
+    }
+
     if (msg.content.startsWith(process.env.PREFIX!)) {
         const command = msg.content
             .toLowerCase()
